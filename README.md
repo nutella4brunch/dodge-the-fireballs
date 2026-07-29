@@ -68,6 +68,11 @@ power-up names. Each name has an equal chance — so what happens if you
 write `"star"` twice? Try making the snowflake rare and precious. And in
 `scripts/fireball.gd`, try a `slow_factor` of `0.1` — almost frozen.
 
+**Make a trap.**
+In `scripts/main.gd`, `coin_points` says what a coin is worth. What happens
+if you make it *negative*? Suddenly the coin is something to dodge — and
+the game has a new kind of decision in it. One number, whole new game.
+
 **Stack the shield.**
 The shield in `scripts/player.gd` is a true/false variable: `has_shield`.
 Could you turn it into a *number* instead, so grabbing two shields lets you
@@ -95,9 +100,10 @@ doing slowly.
 `hud.gd` resets every launch. Godot's `FileAccess` class can write it to disk.
 This is a good introduction to the idea that programs can remember things.
 
-**Invent a new power-up.** Three exist now — star, snowflake, and shield —
-and they show the whole recipe: a name in the list in `main.gd`, a picture
-in `assets/`, and a `match` branch that does the effect. What would yours do?
+**Invent a new power-up.** Four exist now — star, snowflake, shield, and
+coin — and they show the whole recipe: a name in the list in `main.gd`, a
+picture in `assets/`, and a `match` branch that does the effect. What would
+a fifth one do?
 
 ## If something breaks
 

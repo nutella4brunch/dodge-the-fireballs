@@ -8,7 +8,7 @@ signal grabbed(type: String)
 @export var lifetime: float = 5.0
 
 # Which power-up this one is. main.gd picks one at random when spawning.
-@export_enum("star", "snowflake", "shield") var type: String = "star"
+@export_enum("star", "snowflake", "shield", "coin") var type: String = "star"
 
 
 func _ready() -> void:
@@ -19,6 +19,8 @@ func _ready() -> void:
 			$Sprite2D.texture = load("res://assets/powerup_snowflake.svg")
 		"shield":
 			$Sprite2D.texture = load("res://assets/powerup_shield.svg")
+		"coin":
+			$Sprite2D.texture = load("res://assets/powerup_coin.svg")
 
 	# Vanish if nobody grabs it in time.
 	await get_tree().create_timer(lifetime).timeout

@@ -14,6 +14,9 @@ extends Node
 # TWEAK ME: how long the snowflake's slow motion lasts, in seconds.
 @export var slowmo_time: float = 4.0
 
+# TWEAK ME: how many points a coin is worth.
+@export var coin_points: int = 10
+
 var score: int = 0
 var base_spawn_time: float = 1.0
 
@@ -98,7 +101,7 @@ func _on_fireball_timer_timeout() -> void:
 func _on_powerup_timer_timeout() -> void:
 	var powerup := powerup_scene.instantiate()
 	powerup.add_to_group("powerups")
-	powerup.type = ["star", "snowflake", "shield"].pick_random()
+	powerup.type = ["star", "snowflake", "shield", "coin"].pick_random()
 
 	# Somewhere random on screen, but not right at the edge.
 	var screen_size: Vector2 = get_viewport().get_visible_rect().size
@@ -119,6 +122,10 @@ func _on_powerup_grabbed(type: String) -> void:
 			start_slowmo()
 		"shield":
 			$Player.give_shield()
+		"coin":
+			# Free points!
+			score += coin_points
+			$HUD.update_score(score)
 
 
 func start_slowmo() -> void:
