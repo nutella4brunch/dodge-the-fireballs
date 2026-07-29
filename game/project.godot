@@ -54,6 +54,7 @@ start_game={
 
 2d_physics/layer_1="player"
 2d_physics/layer_2="fireballs"
+2d_physics/layer_3="powerups"
 
 [rendering]
 

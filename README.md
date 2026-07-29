@@ -25,11 +25,13 @@ scenes/
   main.tscn            The game itself — ties everything together
   player.tscn          The character you control
   fireball.tscn        One fireball
+  powerup.tscn         A power-up you can grab
   hud.tscn             Score, messages, start button
 scripts/
   main.gd              Spawning, scoring, game over
-  player.gd            Movement and getting hit
+  player.gd            Movement, getting hit, invincibility
   fireball.gd          Fireball behavior
+  powerup.gd           Power-up behavior
   hud.gd               Updating the display
 assets/                The artwork (SVG files)
 ```
@@ -54,6 +56,12 @@ In `scripts/fireball.gd`, raise `max_speed`. In `scripts/main.gd`, lower
 `fastest_spawn` so more can be on screen at once. Find the setting that's fun
 rather than the one that's hardest — that's a real design skill.
 
+**Make the star your own.**
+The invincibility star has three numbers to play with: `invincible_time` in
+`scripts/player.gd`, `lifetime` in `scripts/powerup.gd`, and `powerup_every`
+in `scripts/main.gd`. Try a 10-second star that appears every 3 seconds —
+then try to find settings where the star matters but the game is still hard.
+
 **Change the colors.**
 Open `assets/fireball_1.svg` in any text editor. The `fill="#ff8c1a"` bits are
 colors. Try `#00d4ff` for blue fire. Godot reloads the file automatically when
@@ -75,10 +83,10 @@ doing slowly.
 `hud.gd` resets every launch. Godot's `FileAccess` class can write it to disk.
 This is a good introduction to the idea that programs can remember things.
 
-**Power-ups.** Make a new scene like `fireball.tscn` but with a different
-sprite, and have it give the player a few seconds of invincibility. This one
-touches almost everything: new scene, new script, new collision layer, and a
-timer.
+**Invent a new power-up.** The invincibility star exists now
+(`scenes/powerup.tscn` + `scripts/powerup.gd`) — use it as a map for making
+your own. What would a snowflake that slows every fireball down do? Look at
+how `main.gd` clears the `"fireballs"` group for a hint.
 
 ## If something breaks
 

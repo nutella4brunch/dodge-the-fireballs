@@ -2,10 +2,14 @@ extends Node
 
 # The Fireball scene gets loaded here so we can make copies of it.
 @export var fireball_scene: PackedScene
+@export var powerup_scene: PackedScene
 
 # TWEAK ME: how quickly the game gets harder.
 @export var spawn_speedup: float = 0.985
 @export var fastest_spawn: float = 0.25
+
+# TWEAK ME: how many seconds between power-ups.
+@export var powerup_every: float = 8.0
 
 var score: int = 0
 var base_spawn_time: float = 1.0
@@ -26,16 +30,20 @@ func new_game() -> void:
 	$Player.start($StartPosition.position)
 	$StartTimer.start()
 
+	$PowerupTimer.wait_time = powerup_every
+
 	$HUD.update_score(score)
 	$HUD.show_message("Get Ready!")
 
-	# Clear any leftover fireballs from the last round.
+	# Clear any leftovers from the last round.
 	get_tree().call_group("fireballs", "queue_free")
+	get_tree().call_group("powerups", "queue_free")
 
 
 func game_over() -> void:
 	$ScoreTimer.stop()
 	$FireballTimer.stop()
+	$PowerupTimer.stop()
 	$HUD.show_game_over(score)
 
 
@@ -50,6 +58,7 @@ func _on_player_hit() -> void:
 func _on_start_timer_timeout() -> void:
 	$FireballTimer.start()
 	$ScoreTimer.start()
+	$PowerupTimer.start()
 
 
 func _on_score_timer_timeout() -> void:
@@ -80,3 +89,22 @@ func _on_fireball_timer_timeout() -> void:
 	fireball.linear_velocity = velocity.rotated(direction)
 
 	add_child(fireball)
+
+
+func _on_powerup_timer_timeout() -> void:
+	var powerup := powerup_scene.instantiate()
+	powerup.add_to_group("powerups")
+
+	# Somewhere random on screen, but not right at the edge.
+	var screen_size: Vector2 = get_viewport().get_visible_rect().size
+	powerup.position = Vector2(
+		randf_range(60, screen_size.x - 60),
+		randf_range(60, screen_size.y - 60)
+	)
+
+	powerup.grabbed.connect(_on_powerup_grabbed)
+	add_child(powerup)
+
+
+func _on_powerup_grabbed() -> void:
+	$Player.start_invincibility()

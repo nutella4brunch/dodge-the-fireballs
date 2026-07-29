@@ -6,7 +6,11 @@ signal hit
 # TWEAK ME: how fast the player moves, in pixels per second.
 @export var speed: float = 400.0
 
+# TWEAK ME: how long the star's invincibility lasts, in seconds.
+@export var invincible_time: float = 3.0
+
 var screen_size: Vector2
+var invincible: bool = false
 
 
 func _ready() -> void:
@@ -45,11 +49,33 @@ func _process(delta: float) -> void:
 
 func start(start_position: Vector2) -> void:
 	position = start_position
+	# A new round always starts un-starred.
+	invincible = false
+	$InvincibilityTimer.stop()
+	$AnimatedSprite2D.modulate.a = 1.0
 	show()
 	$CollisionShape2D.disabled = false
 
 
+func start_invincibility() -> void:
+	invincible = true
+	# Go a bit see-through so you can tell it's working.
+	$AnimatedSprite2D.modulate.a = 0.5
+	# start() also restarts the countdown if we grab a second
+	# star while the first one is still going.
+	$InvincibilityTimer.start(invincible_time)
+
+
+func _on_invincibility_timer_timeout() -> void:
+	invincible = false
+	$AnimatedSprite2D.modulate.a = 1.0
+
+
 func _on_body_entered(_body: Node2D) -> void:
+	# The star is protecting us — ignore the hit.
+	if invincible:
+		return
+
 	hit.emit()
 	hide()
 	# Deferred because we can't disable a collision shape
