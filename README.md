@@ -92,9 +92,11 @@ doing slowly.
 
 ### Bigger additions
 
-**Sound.** Add an `AudioStreamPlayer` node to `main.tscn` and call
-`$AudioStreamPlayer.play()` inside `_on_player_hit()`. Free sounds:
-[freesound.org](https://freesound.org) or [kenney.nl](https://kenney.nl/assets).
+**Replace the sounds.** The hit and pickup sounds in `assets/sounds/` are
+tiny computer-made WAV files. Record your own — say "ouch!" into a voice
+memo, save it as a WAV, drop it in that folder, and point the `HitSound`
+node in `main.tscn` at it. Free real ones live at
+[freesound.org](https://freesound.org) and [kenney.nl](https://kenney.nl/assets).
 
 **Cheat at your own game.** The high score is saved in a plain text file.
 In the Godot editor, click **Project → Open User Data Folder** — there's

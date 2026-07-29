@@ -59,6 +59,7 @@ func _on_start_game() -> void:
 
 
 func _on_player_hit() -> void:
+	$HitSound.play()
 	game_over()
 
 
@@ -115,6 +116,7 @@ func _on_powerup_timer_timeout() -> void:
 
 
 func _on_powerup_grabbed(type: String) -> void:
+	$PickupSound.play()
 	match type:
 		"star":
 			$Player.start_invincibility()
