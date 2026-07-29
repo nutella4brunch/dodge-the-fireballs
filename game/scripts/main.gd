@@ -11,6 +11,9 @@ extends Node
 # TWEAK ME: how many seconds between power-ups.
 @export var powerup_every: float = 8.0
 
+# TWEAK ME: how long the snowflake's slow motion lasts, in seconds.
+@export var slowmo_time: float = 4.0
+
 var score: int = 0
 var base_spawn_time: float = 1.0
 
@@ -44,6 +47,7 @@ func game_over() -> void:
 	$ScoreTimer.stop()
 	$FireballTimer.stop()
 	$PowerupTimer.stop()
+	$SlowmoTimer.stop()
 	$HUD.show_game_over(score)
 
 
@@ -94,6 +98,7 @@ func _on_fireball_timer_timeout() -> void:
 func _on_powerup_timer_timeout() -> void:
 	var powerup := powerup_scene.instantiate()
 	powerup.add_to_group("powerups")
+	powerup.type = ["star", "snowflake"].pick_random()
 
 	# Somewhere random on screen, but not right at the edge.
 	var screen_size: Vector2 = get_viewport().get_visible_rect().size
@@ -106,5 +111,20 @@ func _on_powerup_timer_timeout() -> void:
 	add_child(powerup)
 
 
-func _on_powerup_grabbed() -> void:
-	$Player.start_invincibility()
+func _on_powerup_grabbed(type: String) -> void:
+	match type:
+		"star":
+			$Player.start_invincibility()
+		"snowflake":
+			start_slowmo()
+
+
+func start_slowmo() -> void:
+	get_tree().call_group("fireballs", "set_slow", true)
+	# start() also restarts the countdown if we grab a second
+	# snowflake while the first one is still going.
+	$SlowmoTimer.start(slowmo_time)
+
+
+func _on_slowmo_timer_timeout() -> void:
+	get_tree().call_group("fireballs", "set_slow", false)

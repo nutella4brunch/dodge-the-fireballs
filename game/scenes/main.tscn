@@ -58,9 +58,13 @@ wait_time = 1.0
 [node name="PowerupTimer" type="Timer" parent="."]
 wait_time = 8.0
 
+[node name="SlowmoTimer" type="Timer" parent="."]
+one_shot = true
+
 [node name="HUD" parent="." instance = ExtResource("4_hud")]
 
 [connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
 [connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
 [connection signal="timeout" from="FireballTimer" to="." method="_on_fireball_timer_timeout"]
 [connection signal="timeout" from="PowerupTimer" to="." method="_on_powerup_timer_timeout"]
+[connection signal="timeout" from="SlowmoTimer" to="." method="_on_slowmo_timer_timeout"]

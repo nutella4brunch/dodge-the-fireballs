@@ -62,6 +62,12 @@ The invincibility star has three numbers to play with: `invincible_time` in
 in `scripts/main.gd`. Try a 10-second star that appears every 3 seconds —
 then try to find settings where the star matters but the game is still hard.
 
+**Rig the power-up lottery.**
+In `scripts/main.gd`, find `["star", "snowflake"].pick_random()`. Each name
+in the list has an equal chance — so what happens if you write `"star"`
+twice? Try making the snowflake rare and precious. And in
+`scripts/fireball.gd`, try a `slow_factor` of `0.1` — almost frozen.
+
 **Change the colors.**
 Open `assets/fireball_1.svg` in any text editor. The `fill="#ff8c1a"` bits are
 colors. Try `#00d4ff` for blue fire. Godot reloads the file automatically when
@@ -83,10 +89,9 @@ doing slowly.
 `hud.gd` resets every launch. Godot's `FileAccess` class can write it to disk.
 This is a good introduction to the idea that programs can remember things.
 
-**Invent a new power-up.** The invincibility star exists now
-(`scenes/powerup.tscn` + `scripts/powerup.gd`) — use it as a map for making
-your own. What would a snowflake that slows every fireball down do? Look at
-how `main.gd` clears the `"fireballs"` group for a hint.
+**Invent a new power-up.** Two exist now — the star and the snowflake — and
+they show the whole recipe: a name in the list in `main.gd`, a picture in
+`assets/`, and a `match` branch that does the effect. What would yours do?
 
 ## If something breaks
 

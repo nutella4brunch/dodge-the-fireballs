@@ -4,6 +4,26 @@ extends RigidBody2D
 @export var min_speed: float = 150.0
 @export var max_speed: float = 350.0
 
+# TWEAK ME: how much the snowflake slows fireballs down.
+@export var slow_factor: float = 0.5
+
+var slowed: bool = false
+
+
+func set_slow(slow: bool) -> void:
+	# The "slowed" check matters: fireballs that appear during
+	# slow motion never got slowed, so they must not get a
+	# speed boost when it ends.
+	if slow and not slowed:
+		slowed = true
+		linear_velocity *= slow_factor
+		# A blue tint so you can see which ones are slowed.
+		$AnimatedSprite2D.modulate = Color(0.7, 0.85, 1.0)
+	elif not slow and slowed:
+		slowed = false
+		linear_velocity /= slow_factor
+		$AnimatedSprite2D.modulate = Color(1, 1, 1)
+
 
 func _ready() -> void:
 	# Spin the flame sprite so they don't all look identical.
