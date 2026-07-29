@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=3 uid="uid://dma1n5c3n0001"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="PackedScene" uid="uid://cp1ay3rsc3n1" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://cf1r3ba11sc1" path="res://scenes/fireball.tscn" id="3_fireball"]
+[ext_resource type="PackedScene" uid="uid://dhud5c3n0001" path="res://scenes/hud.tscn" id="4_hud"]
+
+[sub_resource type="Gradient" id="Gradient_bg"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0.101961, 0.101961, 0.180392, 1, 0.235294, 0.129412, 0.235294, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bg"]
+gradient = SubResource("Gradient_bg")
+width = 480
+height = 720
+fill_from = Vector2(0, 0)
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Curve2D" id="Curve2D_spawn"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 480, 0, 0, 0, 0, 0, 480, 720, 0, 0, 0, 0, 0, 720, 0, 0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[node name="Main" type="Node"]
+script = ExtResource("1_main")
+fireball_scene = ExtResource("3_fireball")
+
+[node name="Background" type="TextureRect" parent="."]
+offset_right = 480.0
+offset_bottom = 720.0
+texture = SubResource("GradientTexture2D_bg")
+
+[node name="Player" parent="." instance = ExtResource("2_player")]
+position = Vector2(240, 550)
+
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(240, 550)
+
+[node name="FireballPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_spawn")
+
+[node name="FireballSpawnLocation" type="PathFollow2D" parent="FireballPath"]
+rotates = true
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="ScoreTimer" type="Timer" parent="."]
+wait_time = 1.0
+
+[node name="FireballTimer" type="Timer" parent="."]
+wait_time = 1.0
+
+[node name="HUD" parent="." instance = ExtResource("4_hud")]
+
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
+[connection signal="timeout" from="FireballTimer" to="." method="_on_fireball_timer_timeout"]

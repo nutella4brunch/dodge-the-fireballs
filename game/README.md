@@ -1,7 +1,5 @@
 # dodge-the-fireballs
 
-A game I made with my Dad.
-
 A small 2D game built in Godot 4. You fly around dodging fireballs, and your score
 goes up every second you survive. The longer you last, the faster they come.
 

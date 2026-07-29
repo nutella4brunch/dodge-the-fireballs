@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://cf1r3ba11sc1"]
+
+[ext_resource type="Script" path="res://scripts/fireball.gd" id="1_fireball"]
+[ext_resource type="Texture2D" uid="uid://c2f1r3ba1001" path="res://assets/fireball_1.svg" id="2_fframe1"]
+[ext_resource type="Texture2D" uid="uid://c2f1r3ba1002" path="res://assets/fireball_2.svg" id="3_fframe2"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fireball"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_fframe1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_fframe2")
+}],
+"loop": true,
+"name": &"burn",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fireball"]
+radius = 16.0
+
+[node name="Fireball" type="RigidBody2D"]
+collision_layer = 2
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("1_fireball")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_fireball")
+animation = &"burn"
+autoplay = "burn"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_fireball")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
