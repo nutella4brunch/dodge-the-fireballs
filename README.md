@@ -96,9 +96,11 @@ doing slowly.
 `$AudioStreamPlayer.play()` inside `_on_player_hit()`. Free sounds:
 [freesound.org](https://freesound.org) or [kenney.nl](https://kenney.nl/assets).
 
-**A high score that survives closing the game.** Right now `high_score` in
-`hud.gd` resets every launch. Godot's `FileAccess` class can write it to disk.
-This is a good introduction to the idea that programs can remember things.
+**Cheat at your own game.** The high score is saved in a plain text file.
+In the Godot editor, click **Project → Open User Data Folder** — there's
+`high_score.txt`. Open it, type `9999`, save, and restart the game. Then
+look at `load_high_score()` in `scripts/hud.gd` and explain to your Dad
+why that worked. (This is also why real games encrypt their save files.)
 
 **Invent a new power-up.** Four exist now — star, snowflake, shield, and
 coin — and they show the whole recipe: a name in the list in `main.gd`, a
