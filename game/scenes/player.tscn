@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cp1ay3rsc3n1"]
+[gd_scene load_steps=7 format=3 uid="uid://cp1ay3rsc3n1"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Texture2D" uid="uid://b1p1ay3r0001" path="res://assets/player_1.svg" id="2_pframe1"]
 [ext_resource type="Texture2D" uid="uid://b1p1ay3r0002" path="res://assets/player_2.svg" id="3_pframe2"]
+[ext_resource type="Texture2D" path="res://assets/shield_ring.svg" id="4_ring"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_player"]
 animations = [{
@@ -33,6 +34,10 @@ autoplay = "walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_player")
+
+[node name="ShieldRing" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("4_ring")
 
 [node name="InvincibilityTimer" type="Timer" parent="."]
 one_shot = true

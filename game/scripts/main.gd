@@ -98,7 +98,7 @@ func _on_fireball_timer_timeout() -> void:
 func _on_powerup_timer_timeout() -> void:
 	var powerup := powerup_scene.instantiate()
 	powerup.add_to_group("powerups")
-	powerup.type = ["star", "snowflake"].pick_random()
+	powerup.type = ["star", "snowflake", "shield"].pick_random()
 
 	# Somewhere random on screen, but not right at the edge.
 	var screen_size: Vector2 = get_viewport().get_visible_rect().size
@@ -117,6 +117,8 @@ func _on_powerup_grabbed(type: String) -> void:
 			$Player.start_invincibility()
 		"snowflake":
 			start_slowmo()
+		"shield":
+			$Player.give_shield()
 
 
 func start_slowmo() -> void:

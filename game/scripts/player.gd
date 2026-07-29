@@ -11,6 +11,7 @@ signal hit
 
 var screen_size: Vector2
 var invincible: bool = false
+var has_shield: bool = false
 
 
 func _ready() -> void:
@@ -49,10 +50,12 @@ func _process(delta: float) -> void:
 
 func start(start_position: Vector2) -> void:
 	position = start_position
-	# A new round always starts un-starred.
+	# A new round always starts with no power-ups.
 	invincible = false
 	$InvincibilityTimer.stop()
 	$AnimatedSprite2D.modulate.a = 1.0
+	has_shield = false
+	$ShieldRing.hide()
 	show()
 	$CollisionShape2D.disabled = false
 
@@ -71,9 +74,22 @@ func _on_invincibility_timer_timeout() -> void:
 	$AnimatedSprite2D.modulate.a = 1.0
 
 
-func _on_body_entered(_body: Node2D) -> void:
+func give_shield() -> void:
+	has_shield = true
+	$ShieldRing.show()
+
+
+func _on_body_entered(body: Node2D) -> void:
 	# The star is protecting us — ignore the hit.
 	if invincible:
+		return
+
+	# The shield takes one hit for us, and the fireball
+	# that hit it burns up.
+	if has_shield:
+		has_shield = false
+		$ShieldRing.hide()
+		body.queue_free()
 		return
 
 	hit.emit()

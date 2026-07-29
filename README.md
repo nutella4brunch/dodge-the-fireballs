@@ -63,10 +63,16 @@ in `scripts/main.gd`. Try a 10-second star that appears every 3 seconds —
 then try to find settings where the star matters but the game is still hard.
 
 **Rig the power-up lottery.**
-In `scripts/main.gd`, find `["star", "snowflake"].pick_random()`. Each name
-in the list has an equal chance — so what happens if you write `"star"`
-twice? Try making the snowflake rare and precious. And in
+In `scripts/main.gd`, find the `pick_random()` line with the list of
+power-up names. Each name has an equal chance — so what happens if you
+write `"star"` twice? Try making the snowflake rare and precious. And in
 `scripts/fireball.gd`, try a `slow_factor` of `0.1` — almost frozen.
+
+**Stack the shield.**
+The shield in `scripts/player.gd` is a true/false variable: `has_shield`.
+Could you turn it into a *number* instead, so grabbing two shields lets you
+survive two hits? Every place that touches `has_shield` will need a small
+change — finding them all is the exercise.
 
 **Change the colors.**
 Open `assets/fireball_1.svg` in any text editor. The `fill="#ff8c1a"` bits are
@@ -89,9 +95,9 @@ doing slowly.
 `hud.gd` resets every launch. Godot's `FileAccess` class can write it to disk.
 This is a good introduction to the idea that programs can remember things.
 
-**Invent a new power-up.** Two exist now — the star and the snowflake — and
-they show the whole recipe: a name in the list in `main.gd`, a picture in
-`assets/`, and a `match` branch that does the effect. What would yours do?
+**Invent a new power-up.** Three exist now — star, snowflake, and shield —
+and they show the whole recipe: a name in the list in `main.gd`, a picture
+in `assets/`, and a `match` branch that does the effect. What would yours do?
 
 ## If something breaks
 
