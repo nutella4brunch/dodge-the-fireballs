@@ -132,6 +132,8 @@ save files.)
 often a new ball arrives. Try `1.0`. Then open `ball.tscn`, click the
 Ball node, and find **bounce** in its PhysicsMaterial — at `1.0` balls
 bounce forever; below it they slowly die down. Physics is just numbers.
+And in `ball.gd`, try `bounce_grow = 1.0` — suddenly they're beach balls
+leaping at your face.
 
 **Break a test on purpose.** Open `scripts/save_data.gd` and make
 `add_coin` add 2 instead of `amount`. Run the tests (see "Running the
