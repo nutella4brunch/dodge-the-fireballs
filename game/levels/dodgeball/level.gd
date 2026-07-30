@@ -11,6 +11,9 @@ signal finished(score: int, coins: int)
 # TWEAK ME: how often a new ball gets thrown in, in seconds.
 @export var ball_every: float = 4.0
 
+# TWEAK ME: the most balls allowed at once, so the game stays smooth.
+@export var max_balls: int = 50
+
 # TWEAK ME: how many seconds between power-ups.
 @export var powerup_every: float = 8.0
 
@@ -80,6 +83,10 @@ func _on_score_timer_timeout() -> void:
 
 
 func _on_ball_timer_timeout() -> void:
+	# A full gym is full — stop throwing balls in.
+	if get_tree().get_nodes_in_group("balls").size() >= max_balls:
+		return
+
 	var ball := ball_scene.instantiate()
 	ball.add_to_group("balls")
 
