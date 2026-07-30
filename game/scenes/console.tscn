@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://dc0n50le0001"]
+
+[ext_resource type="Script" path="res://scripts/console.gd" id="1_console"]
+[ext_resource type="PackedScene" uid="uid://dc01nbadge01" path="res://scenes/coin_badge.tscn" id="2_badge"]
+
+[node name="Console" type="Node"]
+script = ExtResource("1_console")
+
+[node name="Screen" type="Node" parent="."]
+
+[node name="TopBar" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="CoinBadge" parent="TopBar" instance = ExtResource("2_badge")]
+
+[node name="MenuButton" type="Button" parent="TopBar"]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -78.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 42.0
+grow_horizontal = 0
+text = "Menu"
+
+[connection signal="pressed" from="TopBar/MenuButton" to="." method="_on_menu_button_pressed"]

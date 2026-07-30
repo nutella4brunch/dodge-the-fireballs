@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://dc01nbadge01"]
+
+[ext_resource type="Script" path="res://scripts/coin_badge.gd" id="1_badge"]
+[ext_resource type="Texture2D" path="res://assets/powerup_coin.svg" id="2_coin"]
+
+[node name="CoinBadge" type="PanelContainer"]
+offset_left = 8.0
+offset_top = 8.0
+script = ExtResource("1_badge")
+
+[node name="Row" type="HBoxContainer" parent="."]
+
+[node name="Icon" type="TextureRect" parent="Row"]
+custom_minimum_size = Vector2(26, 26)
+texture = ExtResource("2_coin")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Amount" type="Label" parent="Row"]
+text = "0"
+theme_override_font_sizes/font_size = 20

@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://dma1n5c3n0001"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://levels/fireballs/level.gd" id="1_main"]
 [ext_resource type="PackedScene" uid="uid://cp1ay3rsc3n1" path="res://scenes/player.tscn" id="2_player"]
-[ext_resource type="PackedScene" uid="uid://cf1r3ba11sc1" path="res://scenes/fireball.tscn" id="3_fireball"]
+[ext_resource type="PackedScene" uid="uid://cf1r3ba11sc1" path="res://levels/fireballs/fireball.tscn" id="3_fireball"]
 [ext_resource type="PackedScene" uid="uid://dhud5c3n0001" path="res://scenes/hud.tscn" id="4_hud"]
 [ext_resource type="PackedScene" uid="uid://dp0w3rup0001" path="res://scenes/powerup.tscn" id="5_powerup"]
 [ext_resource type="AudioStream" path="res://assets/sounds/hit.wav" id="6_hitsound"]
@@ -25,7 +25,7 @@ _data = {
 }
 point_count = 5
 
-[node name="Main" type="Node"]
+[node name="Level" type="Node"]
 script = ExtResource("1_main")
 fireball_scene = ExtResource("3_fireball")
 powerup_scene = ExtResource("5_powerup")

@@ -20,26 +20,49 @@ designed to be poked at.
 ## What's in here
 
 ```
-project.godot          Project settings and keyboard controls
-scenes/
-  main.tscn            The game itself — ties everything together
+project.godot          Project settings, controls, and autoloads
+scenes/                Shared parts any level can use
+  console.tscn         The outer shell: menu, coin badge, level loading
+  menu.tscn            The pick-a-level screen
+  coin_badge.tscn      The wallet counter at the top of the screen
   player.tscn          The character you control
-  fireball.tscn        One fireball
   powerup.tscn         A power-up you can grab
   hud.tscn             Score, messages, start button
-scripts/
-  main.gd              Spawning, scoring, game over
-  player.gd            Movement, getting hit, invincibility
-  fireball.gd          Fireball behavior
-  powerup.gd           Power-up behavior
-  hud.gd               Updating the display
-assets/                The artwork (SVG files)
+scripts/               One script per scene above, plus:
+  levels.gd            THE LIST of levels — add yours here
+  save_data.gd         Wallet, unlocks, best scores — the only
+                       script allowed to touch the save file
+levels/
+  fireballs/           The first level. Copy this folder to make
+                       your own: level.tscn, level.gd, fireball.tscn
+tests/
+  run_tests.gd         Questions the tricky code must answer right
+assets/                The artwork (SVG files) and sounds
+docs/                  The plan for where the game is going
 ```
 
 Godot splits things into **scenes** (what a thing is made of) and **scripts**
 (how it behaves). A fireball scene is a physics body plus a sprite plus a
 collision shape; the fireball script says what it does. Every scene here has a
 matching script, which is a good habit to notice early.
+
+The game is organized like a **console with cartridges**: the console
+(`console.tscn`) owns the menu, the save file, and the coin badge; each
+folder in `levels/` is a cartridge that runs its own game and reports its
+score back when a run ends. `docs/levels-design.md` tells the whole story.
+
+## Running the tests
+
+The logic that would be embarrassing to break — saving, unlocking,
+the level list — has tests:
+
+```
+godot --headless --path . --script res://tests/run_tests.gd
+```
+
+(Use the full path to your Godot app if `godot` isn't on your PATH.)
+Each test asks a question; a failure prints the question that got the
+wrong answer.
 
 ## Things to try together
 
@@ -70,12 +93,12 @@ write `"star"` twice? Try making the snowflake rare and precious. And in
 
 **Make a trap.**
 In `scripts/main.gd`, `coin_points` says what a coin is worth. What happens
-if you make it *negative*? Suddenly the coin is something to dodge — and
+if you make it _negative_? Suddenly the coin is something to dodge — and
 the game has a new kind of decision in it. One number, whole new game.
 
 **Stack the shield.**
 The shield in `scripts/player.gd` is a true/false variable: `has_shield`.
-Could you turn it into a *number* instead, so grabbing two shields lets you
+Could you turn it into a _number_ instead, so grabbing two shields lets you
 survive two hits? Every place that touches `has_shield` will need a small
 change — finding them all is the exercise.
 
@@ -98,11 +121,17 @@ memo, save it as a WAV, drop it in that folder, and point the `HitSound`
 node in `main.tscn` at it. Free real ones live at
 [freesound.org](https://freesound.org) and [kenney.nl](https://kenney.nl/assets).
 
-**Cheat at your own game.** The high score is saved in a plain text file.
-In the Godot editor, click **Project → Open User Data Folder** — there's
-`high_score.txt`. Open it, type `9999`, save, and restart the game. Then
-look at `load_high_score()` in `scripts/hud.gd` and explain to your Dad
-why that worked. (This is also why real games encrypt their save files.)
+**Cheat at your own game.** Everything the game remembers — wallet,
+unlocks, best scores — is one JSON file. In the Godot editor, click
+**Project → Open User Data Folder** and open `save.json`. Give yourself
+1000 coins, save, restart. Then read `scripts/save_data.gd` and explain
+to your Dad why that worked. (This is also why real games encrypt their
+save files.)
+
+**Break a test on purpose.** Open `scripts/save_data.gd` and make
+`add_coin` add 2 instead of `amount`. Run the tests (see "Running the
+tests" above) and watch exactly one question fail. Tests are tripwires:
+you find out the moment you break a promise, not three weeks later.
 
 **Invent a new power-up.** Four exist now — star, snowflake, shield, and
 coin — and they show the whole recipe: a name in the list in `main.gd`, a
@@ -118,7 +147,7 @@ and getting comfortable with error messages instead of alarmed by them is
 half of learning to program.
 
 If the game won't start at all, check that **Project → Project Settings →
-Application → Run → Main Scene** points at `res://scenes/main.tscn`.
+Application → Run → Main Scene** points at `res://scenes/console.tscn`.
 
 ## Where to go next
 

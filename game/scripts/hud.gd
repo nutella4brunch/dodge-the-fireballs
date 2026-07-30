@@ -2,28 +2,9 @@ extends CanvasLayer
 
 signal start_game
 
-# The high score lives in this file so it survives closing the game.
-# "user://" is a private folder Godot gives every game for saving things.
-const SAVE_PATH := "user://high_score.txt"
-
+# The level sets this from SaveData when it loads. Saving to disk
+# is SaveData's job now — the HUD only displays things.
 var high_score: int = 0
-
-
-func _ready() -> void:
-	high_score = load_high_score()
-
-
-func load_high_score() -> int:
-	# First time playing? No file yet, so the best is 0.
-	if not FileAccess.file_exists(SAVE_PATH):
-		return 0
-	var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
-	return int(file.get_as_text())
-
-
-func save_high_score() -> void:
-	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-	file.store_string(str(high_score))
 
 
 func show_message(text: String) -> void:
@@ -39,7 +20,6 @@ func update_score(value: int) -> void:
 func show_game_over(final_score: int) -> void:
 	if final_score > high_score:
 		high_score = final_score
-		save_high_score()
 		show_message("New Best: %d!" % final_score)
 	else:
 		show_message("Game Over")

@@ -27,13 +27,15 @@ level, and `levels/fireballs/` is the reference to copy.
 ```
 game/
   levels/
-    fireballs/          level.tscn, level.gd, fireball.tscn, its art
+    fireballs/          level.tscn, level.gd, fireball.tscn
     dodgeball/          (stage 2) same shape
   scenes/               shared parts bin: player, powerup, hud, menu,
-                        coin badge
+                        coin badge (art stays in assets/ for now)
   scripts/
     levels.gd           the master list of levels
     save_data.gd        the only script that touches the save file
+  tests/
+    run_tests.gd        unit tests for save data and the level list
 ```
 
 ## The master list (`levels.gd`)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://cf1r3ba11sc1"]
 
-[ext_resource type="Script" path="res://scripts/fireball.gd" id="1_fireball"]
+[ext_resource type="Script" path="res://levels/fireballs/fireball.gd" id="1_fireball"]
 [ext_resource type="Texture2D" uid="uid://c2f1r3ba1001" path="res://assets/fireball_1.svg" id="2_fframe1"]
 [ext_resource type="Texture2D" uid="uid://c2f1r3ba1002" path="res://assets/fireball_2.svg" id="3_fframe2"]
 

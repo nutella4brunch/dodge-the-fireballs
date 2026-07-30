@@ -7,9 +7,14 @@ config_version=5
 [application]
 
 config/name="Dodge the Fireballs"
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/console.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Levels="*res://scripts/levels.gd"
+SaveData="*res://scripts/save_data.gd"
 
 [display]
 
