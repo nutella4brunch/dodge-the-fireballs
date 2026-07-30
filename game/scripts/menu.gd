@@ -4,11 +4,17 @@ extends Control
 # Levels.all_levels, so it never needs editing to show a new level.
 
 signal level_chosen(folder: String)
+signal shop_chosen
 
 
 func _ready() -> void:
 	for i in range(Levels.all_levels.size()):
 		_add_row(i)
+
+	var shop := Button.new()
+	shop.text = "Shop"
+	shop.pressed.connect(func(): shop_chosen.emit())
+	$Rows.add_child(shop)
 
 
 func _add_row(i: int) -> void:

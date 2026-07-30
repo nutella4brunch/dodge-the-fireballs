@@ -4,6 +4,7 @@ extends Node
 # when you pick one, and writes down how each run went.
 
 var menu_scene := preload("res://scenes/menu.tscn")
+var shop_scene := preload("res://scenes/shop.tscn")
 
 
 func _ready() -> void:
@@ -19,7 +20,16 @@ func show_menu() -> void:
 	$TopBar/MenuButton.hide()
 	var menu := menu_scene.instantiate()
 	menu.level_chosen.connect(_on_level_chosen)
+	menu.shop_chosen.connect(show_shop)
 	$Screen.add_child(menu)
+
+
+func show_shop() -> void:
+	_clear_screen()
+	$TopBar/MenuButton.hide()
+	var shop := shop_scene.instantiate()
+	shop.back_pressed.connect(show_menu)
+	$Screen.add_child(shop)
 
 
 func _on_level_chosen(folder: String) -> void:

@@ -14,6 +14,8 @@ var old_score_path := "user://high_score.txt"
 var wallet: int = 0
 var unlocked: Array = []
 var best: Dictionary = {}
+var owned_skins: Array = ["classic"]
+var current_skin: String = "classic"
 
 
 func _ready() -> void:
@@ -24,6 +26,31 @@ func add_coin(amount: int) -> void:
 	wallet += amount
 	save_game()
 	wallet_changed.emit(wallet)
+
+
+func spend(amount: int) -> bool:
+	# Says no if you can't afford it — the shop relies on this.
+	if amount > wallet:
+		return false
+	wallet -= amount
+	save_game()
+	wallet_changed.emit(wallet)
+	return true
+
+
+func own_skin(id: String) -> void:
+	if not owns_skin(id):
+		owned_skins.append(id)
+		save_game()
+
+
+func owns_skin(id: String) -> bool:
+	return id in owned_skins
+
+
+func wear_skin(id: String) -> void:
+	current_skin = id
+	save_game()
 
 
 func get_best(folder: String) -> int:
@@ -60,6 +87,8 @@ func save_game() -> void:
 		"wallet": wallet,
 		"unlocked": unlocked,
 		"best": best,
+		"owned_skins": owned_skins,
+		"current_skin": current_skin,
 	}))
 
 
@@ -77,6 +106,9 @@ func load_save() -> void:
 	wallet = int(data.get("wallet", 0))
 	unlocked = data.get("unlocked", [])
 	best = data.get("best", {})
+	# Older save files won't have these yet — .get() covers that.
+	owned_skins = data.get("owned_skins", ["classic"])
+	current_skin = data.get("current_skin", "classic")
 
 
 func _migrate_old_high_score() -> void:

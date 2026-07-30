@@ -25,6 +25,8 @@ func _init() -> void:
 	test_save_data_remembers()
 	test_old_high_score_migrates()
 	test_unlock_rule()
+	test_spending()
+	test_skins()
 
 	print("%d passed, %d failed" % [passed, failed])
 	quit(1 if failed > 0 else 0)
@@ -135,6 +137,61 @@ func test_unlock_rule() -> void:
 
 	_delete(save_data.save_path)
 	save_data.free()
+
+
+func test_spending() -> void:
+	var save_data = _fresh_save_data()
+	_delete(save_data.save_path)
+	_delete(save_data.old_score_path)
+	save_data.load_save()
+	save_data.add_coin(25)
+
+	check("you can't spend more than you have",
+		save_data.spend(26) == false)
+	check("a refused purchase doesn't touch the wallet",
+		save_data.wallet == 25)
+	check("spending exactly what you have works",
+		save_data.spend(25) == true)
+	check("the wallet is empty afterwards",
+		save_data.wallet == 0)
+	check("an empty wallet can't buy anything",
+		save_data.spend(1) == false)
+
+	_delete(save_data.save_path)
+	save_data.free()
+
+
+func test_skins() -> void:
+	var skins = load("res://scripts/skins.gd").new()
+	check("every skin has a name, id, price and color",
+		skins.all_skins.all(func(s): return s.has("name") and s.has("id") and s.has("price") and s.has("color")))
+	check("the first skin is free",
+		skins.all_skins[0].price == 0)
+	check("a made-up skin falls back to the first one",
+		skins.find("made_up").id == skins.all_skins[0].id)
+	skins.free()
+
+	var save_data = _fresh_save_data()
+	_delete(save_data.save_path)
+	_delete(save_data.old_score_path)
+	save_data.load_save()
+
+	check("you start owning the classic skin",
+		save_data.owns_skin("classic"))
+	check("you start wearing the classic skin",
+		save_data.current_skin == "classic")
+
+	save_data.own_skin("sunny")
+	save_data.wear_skin("sunny")
+
+	var later = _fresh_save_data()
+	later.load_save()
+	check("owned skins survive a restart", later.owns_skin("sunny"))
+	check("the worn skin survives a restart", later.current_skin == "sunny")
+
+	_delete(save_data.save_path)
+	save_data.free()
+	later.free()
 
 
 func test_old_high_score_migrates() -> void:

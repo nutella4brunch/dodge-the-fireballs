@@ -16,6 +16,9 @@ var has_shield: bool = false
 
 func _ready() -> void:
 	screen_size = get_viewport_rect().size
+	# Wear whichever skin was picked in the shop.
+	var skin: Dictionary = Skins.find(SaveData.current_skin)
+	$AnimatedSprite2D.modulate = skin.color
 	hide()
 
 

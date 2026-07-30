@@ -24,12 +24,14 @@ project.godot          Project settings, controls, and autoloads
 scenes/                Shared parts any level can use
   console.tscn         The outer shell: menu, coin badge, level loading
   menu.tscn            The pick-a-level screen
+  shop.tscn            Spend your coins on skins here
   coin_badge.tscn      The wallet counter at the top of the screen
   player.tscn          The character you control
   powerup.tscn         A power-up you can grab
   hud.tscn             Score, messages, start button
 scripts/               One script per scene above, plus:
   levels.gd            THE LIST of levels — add yours here
+  skins.gd             The shop shelf — add a skin with one line
   save_data.gd         Wallet, unlocks, best scores — the only
                        script allowed to touch the save file
 levels/
@@ -90,6 +92,12 @@ In `scripts/main.gd`, find the `pick_random()` line with the list of
 power-up names. Each name has an equal chance — so what happens if you
 write `"star"` twice? Try making the snowflake rare and precious. And in
 `scripts/fireball.gd`, try a `slow_factor` of `0.1` — almost frozen.
+
+**Design a skin.**
+Open `scripts/skins.gd` and add one line to the list — a name, an id, a
+price, and a `Color(red, green, blue)` where each number is 0 to 1. Save,
+and it's on the shop shelf, buyable, wearable, and remembered forever.
+One line of data, a whole feature. What's your signature color?
 
 **Make a trap.**
 In `scripts/main.gd`, `coin_points` says what a coin is worth. What happens
