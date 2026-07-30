@@ -42,7 +42,10 @@ func _on_level_chosen(folder: String) -> void:
 	$TopBar/MenuButton.show()
 
 
-func _on_level_finished(score: int, _coins: int, folder: String) -> void:
+func _on_level_finished(score: int, folder: String) -> void:
+	# Points ARE coins: every run banks its whole score.
+	SaveData.add_coin(score)
+
 	if score > SaveData.get_best(folder):
 		SaveData.set_best(folder, score)
 

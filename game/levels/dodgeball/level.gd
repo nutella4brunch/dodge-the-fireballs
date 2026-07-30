@@ -2,7 +2,7 @@ extends Node
 
 # The Dodgeball level. Balls bounce off the walls and NEVER go
 # away, so the gym slowly fills up until there's nowhere to stand.
-signal finished(score: int, coins: int)
+signal finished(score: int)
 
 # The Ball scene gets loaded here so we can make copies of it.
 @export var ball_scene: PackedScene
@@ -24,7 +24,6 @@ signal finished(score: int, coins: int)
 @export var coin_points: int = 10
 
 var score: int = 0
-var coins_this_run: int = 0
 
 
 func _ready() -> void:
@@ -37,7 +36,6 @@ func _ready() -> void:
 
 func new_game() -> void:
 	score = 0
-	coins_this_run = 0
 	$BallTimer.wait_time = ball_every
 	$PowerupTimer.wait_time = powerup_every
 
@@ -58,8 +56,9 @@ func game_over() -> void:
 	$PowerupTimer.stop()
 	$SlowmoTimer.stop()
 	$HUD.show_game_over(score)
-	# Report the run to the console, which saves and unlocks.
-	finished.emit(score, coins_this_run)
+	# Report the run to the console, which banks the coins,
+	# saves the best, and unlocks.
+	finished.emit(score)
 
 
 func _on_start_game() -> void:
@@ -125,11 +124,9 @@ func _on_powerup_grabbed(type: String) -> void:
 		"shield":
 			$Player.give_shield()
 		"coin":
-			# Free points now, and one coin in the wallet forever.
+			# Free points — and points become coins when the run ends.
 			score += coin_points
 			$HUD.update_score(score)
-			coins_this_run += 1
-			SaveData.add_coin(1)
 
 
 func start_slowmo() -> void:

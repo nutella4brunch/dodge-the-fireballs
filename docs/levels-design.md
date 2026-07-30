@@ -14,7 +14,7 @@ The console only asks one thing of every cartridge — when a run ends,
 report the result:
 
 ```gdscript
-signal finished(score: int, coins: int)
+signal finished(score: int)
 ```
 
 That signal is the entire contract. A level can reuse the shared player,
@@ -60,8 +60,10 @@ place to keep in sync.
 - **Beating unlocks, coins buy extras.** Levels unlock by skill only.
   The wallet buys skins and other fun things at a shop (stage 3) —
   never level access.
-- **Coins are real money.** A coin still gives +10 score in the round,
-  and *also* adds 1 coin to the wallet, forever.
+- **Points ARE coins.** When a run ends, its whole score is banked
+  into the wallet, 1 point = 1 coin. The coin power-up gives +10
+  points, which therefore also means +10 coins. Quit a run early and
+  it banks nothing — finish your run to get paid.
 - **The coin badge is always visible.** The console draws it on top of
   the menu and on top of every level. It ticks up the moment a coin is
   grabbed.

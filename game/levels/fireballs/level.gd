@@ -2,8 +2,9 @@ extends Node
 
 # The Fireballs level — the reference cartridge. Copy this folder
 # to start a new level. The console only needs this one signal:
-# when a run ends, report how it went.
-signal finished(score: int, coins: int)
+# when a run ends, report the score. Points become coins 1-for-1,
+# but that's the console's business, not ours.
+signal finished(score: int)
 
 # The Fireball scene gets loaded here so we can make copies of it.
 @export var fireball_scene: PackedScene
@@ -23,7 +24,6 @@ signal finished(score: int, coins: int)
 @export var coin_points: int = 10
 
 var score: int = 0
-var coins_this_run: int = 0
 var base_spawn_time: float = 1.0
 
 
@@ -37,7 +37,6 @@ func _ready() -> void:
 
 func new_game() -> void:
 	score = 0
-	coins_this_run = 0
 	base_spawn_time = 1.0
 	$FireballTimer.wait_time = base_spawn_time
 
@@ -60,8 +59,9 @@ func game_over() -> void:
 	$PowerupTimer.stop()
 	$SlowmoTimer.stop()
 	$HUD.show_game_over(score)
-	# Report the run to the console, which saves and unlocks.
-	finished.emit(score, coins_this_run)
+	# Report the run to the console, which banks the coins,
+	# saves the best, and unlocks.
+	finished.emit(score)
 
 
 func _on_start_game() -> void:
@@ -135,11 +135,9 @@ func _on_powerup_grabbed(type: String) -> void:
 		"shield":
 			$Player.give_shield()
 		"coin":
-			# Free points now, and one coin in the wallet forever.
+			# Free points — and points become coins when the run ends.
 			score += coin_points
 			$HUD.update_score(score)
-			coins_this_run += 1
-			SaveData.add_coin(1)
 
 
 func start_slowmo() -> void:
