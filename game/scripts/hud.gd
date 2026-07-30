@@ -7,7 +7,7 @@ signal start_game
 var high_score: int = 0
 
 # TWEAK ME: how fast points pour into the wallet, per second.
-@export var bank_rate: float = 20.0
+@export var bank_rate: float = 40.0
 
 # Points still waiting to be poured into the wallet.
 var banking_left: int = 0
