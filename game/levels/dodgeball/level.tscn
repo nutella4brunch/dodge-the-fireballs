@@ -1,0 +1,92 @@
+[gd_scene load_steps=12 format=3 uid="uid://d0dg3ba11vl1"]
+
+[ext_resource type="Script" path="res://levels/dodgeball/level.gd" id="1_level"]
+[ext_resource type="PackedScene" uid="uid://cp1ay3rsc3n1" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://dba11sc3n001" path="res://levels/dodgeball/ball.tscn" id="3_ball"]
+[ext_resource type="PackedScene" uid="uid://dhud5c3n0001" path="res://scenes/hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" uid="uid://dp0w3rup0001" path="res://scenes/powerup.tscn" id="5_powerup"]
+[ext_resource type="AudioStream" path="res://assets/sounds/hit.wav" id="6_hitsound"]
+[ext_resource type="AudioStream" path="res://assets/sounds/pickup.wav" id="7_pickupsound"]
+
+[sub_resource type="Gradient" id="Gradient_bg"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0.101961, 0.141176, 0.180392, 1, 0.160784, 0.219608, 0.278431, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bg"]
+gradient = SubResource("Gradient_bg")
+width = 480
+height = 720
+fill_from = Vector2(0, 0)
+fill_to = Vector2(0, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
+size = Vector2(520, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
+size = Vector2(20, 760)
+
+[node name="Level" type="Node"]
+script = ExtResource("1_level")
+ball_scene = ExtResource("3_ball")
+powerup_scene = ExtResource("5_powerup")
+
+[node name="Background" type="TextureRect" parent="."]
+offset_right = 480.0
+offset_bottom = 720.0
+texture = SubResource("GradientTexture2D_bg")
+
+[node name="Player" parent="." instance = ExtResource("2_player")]
+position = Vector2(240, 550)
+
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(240, 550)
+
+[node name="Walls" type="StaticBody2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+
+[node name="Top" type="CollisionShape2D" parent="Walls"]
+position = Vector2(240, -10)
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="Bottom" type="CollisionShape2D" parent="Walls"]
+position = Vector2(240, 730)
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="Left" type="CollisionShape2D" parent="Walls"]
+position = Vector2(-10, 360)
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="Right" type="CollisionShape2D" parent="Walls"]
+position = Vector2(490, 360)
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="ScoreTimer" type="Timer" parent="."]
+wait_time = 1.0
+
+[node name="BallTimer" type="Timer" parent="."]
+wait_time = 4.0
+
+[node name="PowerupTimer" type="Timer" parent="."]
+wait_time = 8.0
+
+[node name="SlowmoTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="HitSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_hitsound")
+
+[node name="PickupSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_pickupsound")
+
+[node name="HUD" parent="." instance = ExtResource("4_hud")]
+
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
+[connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]
+[connection signal="timeout" from="PowerupTimer" to="." method="_on_powerup_timer_timeout"]
+[connection signal="timeout" from="SlowmoTimer" to="." method="_on_slowmo_timer_timeout"]

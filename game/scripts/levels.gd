@@ -4,6 +4,7 @@ extends Node
 # Adding a level = adding a folder in levels/ + one line here.
 var all_levels := [
 	{"name": "Fireballs", "folder": "fireballs", "target": 30},
+	{"name": "Dodgeball", "folder": "dodgeball", "target": 40},
 ]
 
 

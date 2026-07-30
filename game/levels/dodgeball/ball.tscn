@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://dba11sc3n001"]
+
+[ext_resource type="Script" path="res://levels/dodgeball/ball.gd" id="1_ball"]
+[ext_resource type="Texture2D" path="res://assets/ball.svg" id="2_ballart"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ball"]
+friction = 0.0
+bounce = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ball"]
+radius = 18.0
+
+[node name="Ball" type="RigidBody2D"]
+collision_layer = 2
+collision_mask = 10
+gravity_scale = 0.0
+physics_material_override = SubResource("PhysicsMaterial_ball")
+linear_damp = 0.0
+angular_damp = 0.0
+script = ExtResource("1_ball")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_ballart")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ball")

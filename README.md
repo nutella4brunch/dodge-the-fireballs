@@ -33,8 +33,8 @@ scripts/               One script per scene above, plus:
   save_data.gd         Wallet, unlocks, best scores — the only
                        script allowed to touch the save file
 levels/
-  fireballs/           The first level. Copy this folder to make
-                       your own: level.tscn, level.gd, fireball.tscn
+  fireballs/           Level 1. Copy a level folder to make your own
+  dodgeball/           Level 2 — bouncy balls that never leave
 tests/
   run_tests.gd         Questions the tricky code must answer right
 assets/                The artwork (SVG files) and sounds
@@ -127,6 +127,11 @@ unlocks, best scores — is one JSON file. In the Godot editor, click
 1000 coins, save, restart. Then read `scripts/save_data.gd` and explain
 to your Dad why that worked. (This is also why real games encrypt their
 save files.)
+
+**Fill the gym.** In `levels/dodgeball/level.gd`, `ball_every` says how
+often a new ball arrives. Try `1.0`. Then open `ball.tscn`, click the
+Ball node, and find **bounce** in its PhysicsMaterial — at `1.0` balls
+bounce forever; below it they slowly die down. Physics is just numbers.
 
 **Break a test on purpose.** Open `scripts/save_data.gd` and make
 `add_coin` add 2 instead of `amount`. Run the tests (see "Running the

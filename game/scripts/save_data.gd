@@ -45,6 +45,15 @@ func is_unlocked(folder: String) -> bool:
 	return folder in unlocked
 
 
+func apply_unlocks(all_levels: Array) -> void:
+	# The rule of the game: beat a level's target and the next
+	# one opens. Checking every level (not just the latest run)
+	# means targets beaten in past sessions still count.
+	for i in range(all_levels.size() - 1):
+		if get_best(all_levels[i].folder) >= int(all_levels[i].target):
+			unlock(all_levels[i + 1].folder)
+
+
 func save_game() -> void:
 	var file := FileAccess.open(save_path, FileAccess.WRITE)
 	file.store_string(JSON.stringify({

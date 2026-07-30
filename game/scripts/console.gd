@@ -7,8 +7,10 @@ var menu_scene := preload("res://scenes/menu.tscn")
 
 
 func _ready() -> void:
-	# The first level is always playable.
+	# The first level is always playable, and targets beaten
+	# in earlier sessions still count.
 	SaveData.unlock(Levels.first_folder())
+	SaveData.apply_unlocks(Levels.all_levels)
 	show_menu()
 
 
@@ -35,10 +37,7 @@ func _on_level_finished(score: int, _coins: int, folder: String) -> void:
 		SaveData.set_best(folder, score)
 
 	# Beat the target? The next level opens up.
-	var entry := Levels.find(folder)
-	var next := Levels.next_after(folder)
-	if score >= int(entry.target) and not next.is_empty():
-		SaveData.unlock(next.folder)
+	SaveData.apply_unlocks(Levels.all_levels)
 
 
 func _on_menu_button_pressed() -> void:

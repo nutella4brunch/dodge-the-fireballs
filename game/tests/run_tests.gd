@@ -24,6 +24,7 @@ func _init() -> void:
 	test_save_data_starts_empty()
 	test_save_data_remembers()
 	test_old_high_score_migrates()
+	test_unlock_rule()
 
 	print("%d passed, %d failed" % [passed, failed])
 	quit(1 if failed > 0 else 0)
@@ -38,6 +39,10 @@ func test_levels_list() -> void:
 		levels.find("fireballs").name == "Fireballs")
 	check("find() returns empty for a made-up level",
 		levels.find("made_up").is_empty())
+	check("the level after fireballs is dodgeball",
+		levels.next_after("fireballs").folder == "dodgeball")
+	check("the last level has nothing after it",
+		levels.next_after(levels.all_levels.back().folder).is_empty())
 	check("every level has a name, folder and target",
 		levels.all_levels.all(func(e): return e.has("name") and e.has("folder") and e.has("target")))
 	check("the level scene file really exists for every level",
@@ -95,6 +100,41 @@ func test_save_data_remembers() -> void:
 	_delete(first.save_path)
 	first.free()
 	second.free()
+
+
+func test_unlock_rule() -> void:
+	# A made-up three-level game, so the test doesn't change
+	# every time the real level list grows.
+	var pretend_levels := [
+		{"name": "One", "folder": "one", "target": 10},
+		{"name": "Two", "folder": "two", "target": 20},
+		{"name": "Three", "folder": "three", "target": 30},
+	]
+
+	var save_data = _fresh_save_data()
+	_delete(save_data.save_path)
+	_delete(save_data.old_score_path)
+	save_data.load_save()
+
+	save_data.set_best("one", 9)
+	save_data.apply_unlocks(pretend_levels)
+	check("just missing the target unlocks nothing",
+		not save_data.is_unlocked("two"))
+
+	save_data.set_best("one", 10)
+	save_data.apply_unlocks(pretend_levels)
+	check("hitting the target exactly unlocks the next level",
+		save_data.is_unlocked("two"))
+	check("it only unlocks ONE level ahead",
+		not save_data.is_unlocked("three"))
+
+	save_data.set_best("two", 25)
+	save_data.apply_unlocks(pretend_levels)
+	check("beating level two unlocks level three",
+		save_data.is_unlocked("three"))
+
+	_delete(save_data.save_path)
+	save_data.free()
 
 
 func test_old_high_score_migrates() -> void:
