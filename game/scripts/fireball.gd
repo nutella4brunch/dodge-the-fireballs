@@ -26,8 +26,10 @@ func set_slow(slow: bool) -> void:
 
 
 func _ready() -> void:
-	# Spin the flame sprite so they don't all look identical.
-	$AnimatedSprite2D.rotation = randf_range(0, TAU)
+	# Turn the flame so the round head leads and the tail
+	# trails behind. The body itself is already rotated to
+	# face the direction of flight (main.gd does that).
+	$AnimatedSprite2D.rotation = -PI / 2
 	# Vary the size a little, too.
 	var scale_factor: float = randf_range(0.8, 1.3)
 	$AnimatedSprite2D.scale = Vector2(scale_factor, scale_factor)
