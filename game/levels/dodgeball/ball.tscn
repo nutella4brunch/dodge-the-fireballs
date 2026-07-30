@@ -17,6 +17,8 @@ gravity_scale = 0.0
 physics_material_override = SubResource("PhysicsMaterial_ball")
 linear_damp = 0.0
 angular_damp = 0.0
+contact_monitor = true
+max_contacts_reported = 4
 script = ExtResource("1_ball")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -24,3 +26,5 @@ texture = ExtResource("2_ballart")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_ball")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

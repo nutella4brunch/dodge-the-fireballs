@@ -10,6 +10,12 @@ extends RigidBody2D
 # TWEAK ME: how much the snowflake slows balls down.
 @export var slow_factor: float = 0.5
 
+# TWEAK ME: how much a ball puffs up when it bounces (1.0 = not at all).
+@export var squish: float = 1.25
+
+# TWEAK ME: how quickly it shrinks back to normal size.
+@export var unsquish_speed: float = 8.0
+
 var slowed: bool = false
 
 
@@ -17,6 +23,17 @@ func _ready() -> void:
 	# Every ball comes in with its own little spin.
 	$Sprite2D.rotation = randf_range(0, TAU)
 	angular_velocity = randf_range(-2.0, 2.0)
+
+
+func _process(delta: float) -> void:
+	# After a bounce, ease back down to normal size. lerp() moves
+	# a little of the way there every frame, which looks springy.
+	$Sprite2D.scale = $Sprite2D.scale.lerp(Vector2.ONE, unsquish_speed * delta)
+
+
+func _on_body_entered(_body: Node) -> void:
+	# Puff up on impact — it reads as "boing".
+	$Sprite2D.scale = Vector2(squish, squish)
 
 
 func set_slow(slow: bool) -> void:
