@@ -43,9 +43,8 @@ func _on_level_chosen(folder: String) -> void:
 
 
 func _on_level_finished(score: int, folder: String) -> void:
-	# Points ARE coins: every run banks its whole score.
-	SaveData.add_coin(score)
-
+	# Points ARE coins — the level's HUD pours them into the
+	# wallet as an animation, so no banking happens here.
 	if score > SaveData.get_best(folder):
 		SaveData.set_best(folder, score)
 

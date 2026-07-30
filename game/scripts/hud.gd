@@ -6,6 +6,42 @@ signal start_game
 # is SaveData's job now — the HUD only displays things.
 var high_score: int = 0
 
+# TWEAK ME: how fast points pour into the wallet, per second.
+@export var bank_rate: float = 20.0
+
+# Points still waiting to be poured into the wallet.
+var banking_left: int = 0
+
+
+func bank_score(amount: int) -> void:
+	# Start pouring: one point leaves the score, one coin lands
+	# in the wallet, over and over until the score runs dry.
+	banking_left = amount
+	$BankTimer.start(1.0 / bank_rate)
+
+
+func finish_banking() -> void:
+	# A new round is starting mid-pour — bank the rest instantly
+	# so no coins get lost.
+	$BankTimer.stop()
+	if banking_left > 0:
+		SaveData.add_coin(banking_left)
+		banking_left = 0
+
+
+func _on_bank_timer_timeout() -> void:
+	if banking_left <= 0:
+		$BankTimer.stop()
+		return
+	banking_left -= 1
+	SaveData.add_coin(1)
+	update_score(banking_left)
+
+
+func _exit_tree() -> void:
+	# Leaving for the menu mid-pour? You still earned it all.
+	finish_banking()
+
 
 func show_message(text: String) -> void:
 	$Message.text = text

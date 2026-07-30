@@ -42,6 +42,8 @@ func new_game() -> void:
 	$Player.start($StartPosition.position)
 	$StartTimer.start()
 
+	# If the last run's points are still pouring, bank the rest now.
+	$HUD.finish_banking()
 	$HUD.update_score(score)
 	$HUD.show_message("Get Ready!")
 
@@ -56,8 +58,9 @@ func game_over() -> void:
 	$PowerupTimer.stop()
 	$SlowmoTimer.stop()
 	$HUD.show_game_over(score)
-	# Report the run to the console, which banks the coins,
-	# saves the best, and unlocks.
+	# Pour the points into the wallet, then report the run to
+	# the console, which saves the best and unlocks.
+	$HUD.bank_score(score)
 	finished.emit(score)
 
 
